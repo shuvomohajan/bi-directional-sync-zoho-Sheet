@@ -1,7 +1,7 @@
 <?php
 
-use App\Http\Controllers\Task1Controller;
-use App\Http\Controllers\Task2Controller;
+use App\Http\Controllers\GoogleSheetsController;
+use App\Http\Controllers\ZohoCrmController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -15,28 +15,25 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
+Route::view('/', 'welcome');
+
+Route::middleware('auth')->group(function () {
+    Route::view('/dashboard', 'dashboard')->name('dashboard');
+    Route::prefix('task-1')->group(function () {
+        Route::view('/', 'task1.index')->name('task.1');
+        //Google Sheets
+        Route::view('oauth-google-sheets', 'task1.google_sheets')->name('oauth.google.sheets');
+        Route::post('oauth-google-sheets', [GoogleSheetsController::class, 'oauthGoogleSheetsAuthorize'])->name('oauth.google.sheets.authorize');
+        Route::get('oauth-google-sheets/callback', [GoogleSheetsController::class, 'oauthGoogleSheetsCallback'])->name('oauth.google.sheets.callback');
+        //Zoho CRM
+        Route::view('oauth-zoho-crm', 'task1.zoho_crm')->name('oauth.zoho.crm');
+        Route::post('oauth-zoho-crm', [ZohoCrmController::class, 'oauthZohoCrmAuthorize'])->name('oauth.zoho.crm.authorize');
+        Route::get('oauth-zoho-crm/callback', [ZohoCrmController::class, 'oauthZohoCrmCallback'])->name('oauth.zoho.crm.callback');
+    });
+    Route::prefix('task-2')->group(function () {
+        Route::view('/', 'task2.index')->name('task.2');
+        Route::post('google-sheets-store', [GoogleSheetsController::class, 'googleSheetsStore'])->name('google.sheets.store');
+    });
 });
 
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware(['auth'])->name('dashboard');
-
-Route::prefix('task-1')->group(function () {
-    Route::view('/', 'task1.index')->name('task.1');
-    Route::view('oauth-google-sheets', 'task1.google_sheets')->name('oauth.google.sheets');
-    Route::post('oauth-google-sheets', [Task1Controller::class, 'oauthGoogleSheetsAuthorize'])->name('oauth.google.sheets.authorize');
-    Route::get('oauth-google-sheets/callback', [Task1Controller::class, 'oauthGoogleSheetsCallback'])->name('oauth.google.sheets.callback');
-
-    Route::view('oauth-zoho-crm', 'task1.zoho_crm')->name('oauth.zoho.crm');
-    // Route::post('oauth-google-sheets', [Task1Controller::class, 'oauthGoogleSheetsAuthorize'])->name('oauth.google.sheets.authorize');
-    // Route::get('oauth-google-sheets/callback', [Task1Controller::class, 'oauthGoogleSheetsCallback'])->name('oauth.google.sheets.callback');
-});
-
-Route::prefix('task-2')->group(function () {
-    Route::view('/', 'task2.index')->name('task.2');
-    Route::post('google-sheets-store', [Task1Controller::class, 'googleSheetsStore'])->name('google.sheets.store');
-});
-
-require __DIR__.'/auth.php';
+require __DIR__ . '/auth.php';

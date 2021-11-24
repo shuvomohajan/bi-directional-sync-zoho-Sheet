@@ -15,7 +15,7 @@
           </div>
         </div>
         <div class="bg-white p-6 overflow-hidden shadow-sm sm:rounded-lg col-span-9">
-            <form action="{{ route('oauth.zoho.crm.') }}" method="POST">
+            <form action="{{ route('oauth.zoho.crm') }}" method="POST">
                 @csrf
                 <div class="mb-3">
                   <label for="client_id">Client Id</label>

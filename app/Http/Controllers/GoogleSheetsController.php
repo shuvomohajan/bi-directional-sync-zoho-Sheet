@@ -2,14 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use Config;
 use Google\Client;
 use Google\Service\Sheets;
 use Google\Service\Sheets\ValueRange;
 use Illuminate\Http\Request;
-use Log;
 
-class Task1Controller extends Controller
+class GoogleSheetsController extends Controller
 {
     private $client, $sheets;
 
@@ -35,13 +33,11 @@ class Task1Controller extends Controller
         if (isset($_GET['code'])) {
             $token = $this->client->fetchAccessTokenWithAuthCode($_GET['code']);
         }
-
         session()->put('g_auth', $token);
         return redirect()->route('task.1')->with('success', 'Authorization Successful.');
     }
 
     // task 2
-
     public function googleSheetsStore(Request $request)
     {
         $token = session()->get('g_auth');

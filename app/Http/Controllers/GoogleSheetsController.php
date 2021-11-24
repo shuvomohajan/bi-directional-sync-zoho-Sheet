@@ -16,7 +16,7 @@ class GoogleSheetsController extends Controller
         $this->client = new Client();
         $this->client->setApplicationName('Google Sheets API PHP Quickstart');
         $this->client->setScopes(Sheets::SPREADSHEETS);
-        $this->client->setRedirectUri("http://127.0.0.1:8000/task-1/oauth-google-sheets/callback");
+        $this->client->setRedirectUri(route('oauth.google.sheets.callback'));
         $this->client->setAuthConfig('credentials.json');
         $this->client->setAccessType('offline');
         $this->sheets = new Sheets($this->client);
@@ -30,11 +30,11 @@ class GoogleSheetsController extends Controller
 
     public function oauthGoogleSheetsCallback()
     {
-        if (isset($_GET['code'])) {
-            $token = $this->client->fetchAccessTokenWithAuthCode($_GET['code']);
+        if (isset(request()->code)) {
+            $token = $this->client->fetchAccessTokenWithAuthCode(request()->code);
+            \Session::put('g_auth', $token);
         }
-        session()->put('g_auth', $token);
-        return redirect()->route('task.1')->with('success', 'Authorization Successful.');
+        return redirect()->route('task.1');
     }
 
     // task 2

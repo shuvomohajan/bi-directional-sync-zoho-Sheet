@@ -15,18 +15,18 @@
           </div>
         </div>
         <div class="bg-white p-6 overflow-hidden shadow-sm sm:rounded-lg col-span-9">
-            <form action="{{ route('oauth.zoho.crm') }}" method="POST">
-                @csrf
-                <div class="mb-3">
-                  <label for="client_id">Client Id</label>
-                  <input type="text" name="client_id" id="client_id" class="block border-gray-300 rounded-md w-full focus:ring-gray-400 focus:border-gray-400">
-                </div>
-                <div class="mb-3">
-                  <label for="client_secret">Client Secret</label>
-                  <input type="text" name="client_secret" id="client_secret" class="block border-gray-300 rounded-md w-full focus:ring-gray-400 focus:border-gray-400">
-                </div>
-                <button class="py-2 px-6 bg-gray-900 text-white rounded-md">Authorize</button>
-              </form>
+          <form action="{{ route('oauth.zoho.crm') }}" method="POST">
+            @csrf
+            <div class="mb-3">
+              <label for="client_id">Client Id</label>
+              <input value="1000.PO2T1HWRXKROR3Z6BGJVQ09OT3YFTD" type="text" name="client_id" id="client_id" class="block border-gray-300 rounded-md w-full focus:ring-gray-400 focus:border-gray-400">
+            </div>
+            <div class="mb-3">
+              <label for="client_secret">Client Secret</label>
+              <input value="7682bf3745870294a1687ae057c3899fc8ff1a2ec6" type="text" name="client_secret" id="client_secret" class="block border-gray-300 rounded-md w-full focus:ring-gray-400 focus:border-gray-400">
+            </div>
+            <button class="py-2 px-6 bg-gray-900 text-white rounded-md">Authorize</button>
+          </form>
         </div>
       </div>
     </div>

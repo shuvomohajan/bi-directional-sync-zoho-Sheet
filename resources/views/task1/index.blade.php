@@ -27,9 +27,9 @@
               <h2 class="mb-4 font-bold text-yellow-600">Google Oauth Not Authorized</h2>
             @endif
             @if (session()->has('zoho_auth'))
-              <h2 class="mb-4 font-bold text-gray-800">Google Oauth</h2>
+              <h2 class="mb-4 font-bold text-gray-800">Zoho CRM Oauth</h2>
               <div class="bg-green-50 border-l-4 border-green-500 text-green-700 p-2.5">
-                @foreach (session()->get('g_auth') as $key => $value)
+                @foreach (json_decode(session()->get('zoho_auth')) as $key => $value)
                   <p><b>{{ $key }}</b>: {{ $value }}</p>
                 @endforeach
               </div>

@@ -31,8 +31,11 @@ Route::middleware('auth')->group(function () {
         Route::get('oauth-zoho-crm/callback', [ZohoCrmController::class, 'oauthZohoCrmCallback'])->name('oauth.zoho.crm.callback');
     });
     Route::prefix('task-2')->group(function () {
-        Route::view('/', 'task2.index')->name('task.2');
+        Route::view('google-sheets-create', 'task2.google_sheets_create')->name('google.sheets.create');
         Route::post('google-sheets-store', [GoogleSheetsController::class, 'googleSheetsStore'])->name('google.sheets.store');
+
+        Route::view('zoho-crm-create', 'task2.zoho_crm_create')->name('zoho.crm.create');
+        Route::post('zoho-crm-store', [ZohoCrmController::class, 'zohoCrmStore'])->name('zoho.crm.store');
     });
 });
 

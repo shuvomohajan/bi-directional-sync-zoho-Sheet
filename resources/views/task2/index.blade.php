@@ -13,19 +13,19 @@
             @csrf
             <div class="mb-10">
                 <label for="google_sheet_id">Google Sheet Id</label>
-                <input type="text" value="1aUp_GEJTzskJTkYHKb6h9azkR_QuUM8i-dZH9_hLgAk" readonly name="google_sheet_id" id="google_sheet_id" class="block rounded-md w-full focus:ring-blue-400">
+                <input type="text" value="1aUp_GEJTzskJTkYHKb6h9azkR_QuUM8i-dZH9_hLgAk" readonly name="google_sheet_id" id="google_sheet_id" class="block border-gray-300 rounded-md w-full focus:ring-gray-400 focus:border-gray-400">
               </div>
               <div class="mb-3">
                 <label for="name">Name</label>
-                <input type="text" name="name" id="name" class="block rounded-md w-full focus:ring-blue-400">
+                <input type="text" name="name" id="name" class="block border-gray-300 rounded-md w-full focus:ring-gray-400 focus:border-gray-400">
               </div>
               <div class="mb-3">
                 <label for="email">Email</label>
-                <input type="text" name="email" id="email" class="block rounded-md w-full focus:ring-blue-400">
+                <input type="text" name="email" id="email" class="block border-gray-300 rounded-md w-full focus:ring-gray-400 focus:border-gray-400">
               </div>
               <div class="mb-3">
                 <label for="phone">Phone</label>
-                <input type="text" name="phone" id="phone" class="block rounded-md w-full focus:ring-blue-400">
+                <input type="text" name="phone" id="phone" class="block border-gray-300 rounded-md w-full focus:ring-gray-400 focus:border-gray-400">
               </div>
               <button class="py-2 px-6 bg-gray-900 text-white rounded-md">save data</button>
             </form>

@@ -29,7 +29,7 @@
             @if (session()->has('zoho_auth'))
               <h2 class="mb-4 font-bold text-gray-800">Zoho CRM Oauth</h2>
               <div class="bg-green-50 border-l-4 border-green-500 text-green-700 p-2.5">
-                @foreach (json_decode(session()->get('zoho_auth')) as $key => $value)
+                @foreach (session()->get('zoho_auth') as $key => $value)
                   <p><b>{{ $key }}</b>: {{ $value }}</p>
                 @endforeach
               </div>

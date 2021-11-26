@@ -40,6 +40,9 @@ class GoogleSheetsController extends Controller
     // task 2
     public function googleSheetsStore(Request $request)
     {
+        if(!session()->has('g_auth')) {
+            return redirect()->route('oauth.google.sheets')->with('error', 'Not Authorized!');
+        }
         $token = session()->get('g_auth');
         $this->client->setAccessToken($token);
 

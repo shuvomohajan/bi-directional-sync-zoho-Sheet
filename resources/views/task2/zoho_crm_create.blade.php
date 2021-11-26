@@ -18,17 +18,46 @@
                     <div class="p-6 bg-white">
                         <form action="{{ route('zoho.crm.store') }}" method="POST">
                             @csrf
-                            <div class="mb-3">
-                                <label for="name">Name</label>
-                                <input type="text" name="name" id="name" class="block border-gray-300 rounded-md w-full focus:ring-gray-400 focus:border-gray-400">
-                            </div>
-                            <div class="mb-3">
-                                <label for="email">Email</label>
-                                <input type="text" name="email" id="email" class="block border-gray-300 rounded-md w-full focus:ring-gray-400 focus:border-gray-400">
-                            </div>
-                            <div class="mb-3">
-                                <label for="phone">Phone</label>
-                                <input type="text" name="phone" id="phone" class="block border-gray-300 rounded-md w-full focus:ring-gray-400 focus:border-gray-400">
+                            <div class="grid grid-cols-2 gap-4">
+                                <div>
+                                    <div class="mb-3">
+                                        <label for="First_Name">First Name</label>
+                                        <input type="text" name="First_Name" id="First_Name" class="@error('First_Name') border-red-500 @enderror block border-gray-300 rounded-md w-full focus:ring-gray-400 focus:border-gray-400">
+                                        @error('First_Name')
+                                        <p class="text-sm font-bold text-red-500">{{ $message }}</p>
+                                        @enderror
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="Last_Name">Last Name</label>
+                                        <input type="text" name="Last_Name" id="Last_Name" class="@error('Last_Name') border-red-500 @enderror block border-gray-300 rounded-md w-full focus:ring-gray-400 focus:border-gray-400">
+                                        @error('Last_Name')
+                                        <p class="text-sm font-bold text-red-500">{{ $message }}</p>
+                                        @enderror
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="Email">Email</label>
+                                        <input type="email" name="Email" id="Email" class="@error('Email') border-red-500 @enderror block border-gray-300 rounded-md w-full focus:ring-gray-400 focus:border-gray-400">
+                                        @error('Email')
+                                        <p class="text-sm font-bold text-red-500">{{ $message }}</p>
+                                        @enderror
+                                    </div>
+                                </div>
+                                <div>
+                                    <div class="mb-3">
+                                        <label for="Company">Company</label>
+                                        <input type="text" name="Company" id="Company" class="@error('Company') border-red-500 @enderror block border-gray-300 rounded-md w-full focus:ring-gray-400 focus:border-gray-400">
+                                        @error('Company')
+                                        <p class="text-sm font-bold text-red-500">{{ $message }}</p>
+                                        @enderror
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="State">State</label>
+                                        <input type="text" name="State" id="State" class="@error('State') border-red-500 @enderror block border-gray-300 rounded-md w-full focus:ring-gray-400 focus:border-gray-400">
+                                        @error('State')
+                                        <p class="text-sm font-bold text-red-500">{{ $message }}</p>
+                                        @enderror
+                                    </div>
+                                </div>
                             </div>
                             <button class="py-2 px-6 bg-gray-900 text-white rounded-md">save data</button>
                         </form>

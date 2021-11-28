@@ -23,17 +23,27 @@
                                 <input type="text" value="1aUp_GEJTzskJTkYHKb6h9azkR_QuUM8i-dZH9_hLgAk" readonly name="google_sheet_id" id="google_sheet_id"
                                        class="block border-gray-300 rounded-md w-full focus:ring-gray-400 focus:border-gray-400">
                             </div>
-                            <div class="mb-3">
-                                <label for="name">Name</label>
-                                <input type="text" name="name" id="name" class="block border-gray-300 rounded-md w-full focus:ring-gray-400 focus:border-gray-400">
+                            <div class="grid grid-cols-2 gap-4">
+                                <div class="mb-3">
+                                    <label for="first_name">First Name</label>
+                                    <input type="text" name="first_name" id="first_name" class="block border-gray-300 rounded-md w-full focus:ring-gray-400 focus:border-gray-400">
+                                </div>
+                                <div class="mb-3">
+                                    <label for="last_name">Last Name</label>
+                                    <input type="text" name="last_name" id="last_name" class="block border-gray-300 rounded-md w-full focus:ring-gray-400 focus:border-gray-400">
+                                </div>
                             </div>
                             <div class="mb-3">
                                 <label for="email">Email</label>
                                 <input type="text" name="email" id="email" class="block border-gray-300 rounded-md w-full focus:ring-gray-400 focus:border-gray-400">
                             </div>
                             <div class="mb-3">
-                                <label for="phone">Phone</label>
-                                <input type="text" name="phone" id="phone" class="block border-gray-300 rounded-md w-full focus:ring-gray-400 focus:border-gray-400">
+                                <label for="company">Company</label>
+                                <input type="text" name="company" id="company" class="block border-gray-300 rounded-md w-full focus:ring-gray-400 focus:border-gray-400">
+                            </div>
+                            <div class="mb-3">
+                                <label for="state">State</label>
+                                <input type="text" name="state" id="state" class="block border-gray-300 rounded-md w-full focus:ring-gray-400 focus:border-gray-400">
                             </div>
                             <button class="py-2 px-6 bg-gray-900 text-white rounded-md">save data</button>
                         </form>

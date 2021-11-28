@@ -2,62 +2,51 @@
 
 namespace App\Http\Controllers;
 
-use Google\Client;
-use Google\Service\Sheets;
-use Google\Service\Sheets\ValueRange;
+use App\Http\Requests\CreateSheetRowRequest;
+use App\Services\GoogleOauthService;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Session;
 
 class GoogleSheetsController extends Controller
 {
-    private $client, $sheets;
+    private $googleService, $client;
 
     public function __construct()
     {
-        $this->client = new Client();
-        $this->client->setApplicationName('Google Sheets API PHP Quickstart');
-        $this->client->setScopes(Sheets::SPREADSHEETS);
-        $this->client->setRedirectUri(route('oauth.google.sheets.callback'));
-        $this->client->setAuthConfig('credentials.json');
-        $this->client->setAccessType('offline');
-        $this->sheets = new Sheets($this->client);
+        $this->setClientCredentials();
+        $this->googleService = new GoogleOauthService(session()->get('g_client_id'), session()->get('g_client_secret'));
+        $this->client = $this->googleService->getClient();
+    }
+
+    private function setClientCredentials()
+    {
+        if (request()->client_id && request()->client_secret) {
+            session()->put('g_client_id', request()->client_id);
+            session()->put('g_client_secret', request()->client_secret);
+        }
     }
 
     public function oauthGoogleSheetsAuthorize(Request $request)
     {
-        $authUrl = $this->client->createAuthUrl();
-        return redirect($authUrl);
+        return redirect($this->client->createAuthUrl());
     }
 
-    public function oauthGoogleSheetsCallback()
+    public function oauthGoogleSheetsCallback(): RedirectResponse
     {
         if (isset(request()->code)) {
             $token = $this->client->fetchAccessTokenWithAuthCode(request()->code);
-            \Session::put('g_auth', $token);
+            Session::put('g_auth', $token);
+            auth()->user()->update(['token' => $token['access_token']]);
         }
         return redirect()->route('task.1');
     }
 
-    // task 2
-    public function googleSheetsStore(Request $request)
+    public function googleSheetsStore(CreateSheetRowRequest $request): RedirectResponse
     {
-        if(!session()->has('g_auth')) {
-            return redirect()->route('oauth.google.sheets')->with('error', 'Not Authorized!');
-        }
-        $token = session()->get('g_auth');
-        $this->client->setAccessToken($token);
+        if ($this->googleService->appendSingleRow('1aUp_GEJTzskJTkYHKb6h9azkR_QuUM8i-dZH9_hLgAk', $request->validated()))
+            return back()->with('success', 'Data added successfully.');
 
-        $values = [[
-            $request->input('name'),
-            $request->input('email'),
-            $request->input('phone'),
-        ],];
-        $body = new ValueRange([
-            'values' => $values
-        ]);
-        $params = [
-            'valueInputOption' => 'RAW'
-        ];
-        $this->sheets->spreadsheets_values->append($request->input('google_sheet_id'), 'A:Z', $body, $params);
-        return back()->with('success', 'Data added successfully.');
+        return back()->with('error', 'Somethings wrong!');
     }
 }

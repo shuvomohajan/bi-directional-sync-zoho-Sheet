@@ -31,9 +31,15 @@ class GoogleOauthService
     public function appendSingleRow($token, $sheet_id, $formData): bool
     {
         try {
-            $body = new ValueRange(['values' => [array_values($formData)]]);
             $this->client->setAccessToken($token);
             $sheets = new Sheets($this->client);
+
+            $response = $sheets->spreadsheets_values->get($sheet_id, 'C:C');
+            foreach ($response->getValues() as $value) {
+                if ($formData['email'] == $value[0]) return false;
+            }
+
+            $body = new ValueRange(['values' => [array_values($formData)]]);
             $sheets->spreadsheets_values->append($sheet_id, 'A:Z', $body, ['valueInputOption' => 'RAW']);
             return true;
         }catch (\Exception $e) {

@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\GoogleSheetsController;
+use App\Http\Controllers\UserController;
 use App\Http\Controllers\ZohoCrmController;
 use Illuminate\Support\Facades\Route;
 
@@ -31,9 +32,11 @@ Route::middleware('auth')->group(function () {
         Route::get('oauth-zoho-crm/callback', [ZohoCrmController::class, 'oauthZohoCrmCallback'])->name('oauth.zoho.crm.callback');
     });
     Route::prefix('task-2')->group(function () {
+        Route::put('user-google-sheets-id-update', [UserController::class, 'updateUserGoogleSheetId'])->name('user.google.sheets.id.update');
+        //Google Sheets
         Route::view('google-sheets-create', 'task2.google_sheets_create')->name('google.sheets.create');
         Route::post('google-sheets-store', [GoogleSheetsController::class, 'googleSheetsStore'])->name('google.sheets.store');
-
+        //Zoho CRM
         Route::view('zoho-crm-create', 'task2.zoho_crm_create')->name('zoho.crm.create');
         Route::post('zoho-crm-store', [ZohoCrmController::class, 'zohoCrmStore'])->name('zoho.crm.store');
     });

@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -20,8 +19,14 @@ class User extends Authenticatable
     protected $fillable = [
         'name',
         'email',
-        'token',
         'password',
+        'google_client_id',
+        'google_client_secret',
+        'google_sheet_id',
+        'google_oauth_token',
+        'zoho_client_id',
+        'zoho_client_secret',
+        'zoho_oauth_token',
     ];
 
     /**
@@ -40,6 +45,8 @@ class User extends Authenticatable
      * @var array
      */
     protected $casts = [
-        'email_verified_at' => 'datetime',
+        'email_verified_at'  => 'datetime',
+        'google_oauth_token' => 'array',
+        'zoho_oauth_token'   => 'array',
     ];
 }

@@ -14,15 +14,24 @@
                         <a href="{{ route('zoho.crm.create') }}" class="border-l-4 border-gray-900 block p-2.5 bg-gray-50 hover:bg-gray-100">Zoho CRM</a>
                     </div>
                 </div>
-                <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg col-span-9">
+                <div class="overflow-hidden shadow-sm sm:rounded-lg col-span-9 space-y-4">
+                    <div class="p-6 bg-white">
+                        <form action="{{ route('user.google.sheets.id.update') }}" method="post">
+                            @csrf
+                            @method('PUT')
+                            <div class="mb-3">
+                                <label for="google_sheet_id">Google Sheet Id</label>
+                                <div class="flex space-x-4">
+                                    <input type="text" value="{{ Auth::user()->google_sheet_id }}" name="google_sheet_id" id="google_sheet_id"
+                                           class="block border-gray-300 rounded-md w-full focus:ring-gray-400 focus:border-gray-400">
+                                    <button type="submit" class="py-2 px-6 bg-gray-900 text-white rounded-md">Update</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
                     <div class="p-6 bg-white">
                         <form action="{{ route('google.sheets.store') }}" method="POST">
                             @csrf
-                            <div class="mb-10">
-                                <label for="google_sheet_id">Google Sheet Id</label>
-                                <input type="text" value="1aUp_GEJTzskJTkYHKb6h9azkR_QuUM8i-dZH9_hLgAk" readonly name="google_sheet_id" id="google_sheet_id"
-                                       class="block border-gray-300 rounded-md w-full focus:ring-gray-400 focus:border-gray-400">
-                            </div>
                             <div class="grid grid-cols-2 gap-4">
                                 <div class="mb-3">
                                     <label for="first_name">First Name</label>

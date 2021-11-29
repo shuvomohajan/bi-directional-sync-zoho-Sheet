@@ -17,7 +17,17 @@ class CreateUsersTable extends Migration
             $table->id();
             $table->string('name');
             $table->string('email')->unique();
-            $table->string('token')->nullable();
+
+            // for simplicity this information stored here
+            $table->string('google_client_id')->nullable();
+            $table->string('google_client_secret')->nullable();
+            $table->string('google_sheet_id')->nullable();
+            $table->json('google_oauth_token')->nullable();
+
+            $table->string('zoho_client_id')->nullable();
+            $table->string('zoho_client_secret')->nullable();
+            $table->json('zoho_oauth_token')->nullable();
+
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->rememberToken();

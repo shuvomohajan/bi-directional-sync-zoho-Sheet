@@ -2,30 +2,25 @@
 
 namespace App\Services;
 
-use App\Models\User;
 use Google\Client;
 use Google\Service\Sheets;
 use Google\Service\Sheets\ValueRange;
 
 class GoogleOauthService
 {
-    private $client, $user_id;
+    private $client;
 
     public function __construct($client_id, $client_secret)
     {
-        $this->client = new Client();
-        $this->client->setApplicationName('Google Sheets API PHP Quickstart');
-        $this->client->setScopes(Sheets::SPREADSHEETS);
-//        $this->client->setClientId($client_id);
-//        $this->client->setClientSecret($client_secret);
-//        $this->client->setRedirectUri(route('oauth.google.sheets.callback'));
-        $this->client->setAuthConfig('credentials.json');
-        $this->client->setAccessType('offline');
-    }
+        \Log::info('Client Id >> ' . $client_id . 'Client Secret >> ' . $client_secret);
 
-    public function setUserId($user_id)
-    {
-        $this->user_id = $user_id;
+        $this->client = new Client();
+        $this->client->setApplicationName('Bitcode Tasks');
+        $this->client->setScopes(Sheets::SPREADSHEETS);
+        $this->client->setClientId($client_id);
+        $this->client->setClientSecret($client_secret);
+        $this->client->setRedirectUri(route('oauth.google.sheets.callback'));
+        $this->client->setAccessType('offline');
     }
 
     public function getClient(): Client
@@ -33,24 +28,16 @@ class GoogleOauthService
         return $this->client;
     }
 
-    public function appendSingleRow($sheet_id, $formData)
+    public function appendSingleRow($token, $sheet_id, $formData): bool
     {
-        if (\Auth::check()) {
-            if (\Auth::user()->token == null) {
-                return redirect()->route('oauth.google.sheets')->with('error', 'Not Authorized!');
-            }
-            $token = \Session::get('g_auth');
-        } else {
-            if ($user = User::find($this->user_id)) {
-                $token = $user->token;
-            }
+        try {
+            $body = new ValueRange(['values' => [array_values($formData)]]);
+            $this->client->setAccessToken($token);
+            $sheets = new Sheets($this->client);
+            $sheets->spreadsheets_values->append($sheet_id, 'A:Z', $body, ['valueInputOption' => 'RAW']);
+            return true;
+        }catch (\Exception $e) {
+            return false;
         }
-
-        $body = new ValueRange(['values' => [array_values($formData)]]);
-        $this->client->setAccessToken($token ?? null);
-        $sheets = new Sheets($this->client);
-        $sheets->spreadsheets_values->append($sheet_id, 'A:Z', $body, ['valueInputOption' => 'RAW']);
-
-        return true;
     }
 }

@@ -19,4 +19,4 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::post('zoho-crm-get-notified/{user_id}', [SyncController::class, 'zohoCrmGetNotified']);
+Route::post('zoho-crm-get-notified/{user}', [SyncController::class, 'zohoCrmGetNotified']);

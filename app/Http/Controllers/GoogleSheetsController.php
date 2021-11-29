@@ -40,7 +40,7 @@ class GoogleSheetsController extends Controller
             $this->createGoogleInstance();
             $token = $this->client->fetchAccessTokenWithAuthCode(request()->code);
             Session::put('g_auth', $token);
-            auth()->user()->update(['google_oauth_token' => $token]);
+            Auth::user()->update(['google_oauth_token' => $token]);
         }
         return redirect()->route('task.1');
     }

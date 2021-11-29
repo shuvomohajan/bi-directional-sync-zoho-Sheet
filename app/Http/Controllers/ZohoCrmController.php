@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\CreateLeadsRequest;
+use Auth;
 use Http;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -12,8 +13,14 @@ class ZohoCrmController extends Controller
 {
     public function oauthZohoCrmAuthorize(Request $request)
     {
-        session()->put('zoho_client_id', $request->input('client_id'));
-        session()->put('zoho_client_secret', $request->input('client_secret'));
+        $request->validate([
+            'client_id'     => ['required', 'string'],
+            'client_secret' => ['required', 'string'],
+        ]);
+        Auth::user()->update([
+            'zoho_client_id'     => $request->input('client_id'),
+            'zoho_client_secret' => $request->input('client_secret'),
+        ]);
         $response = Http::post("https://accounts.zoho.com/oauth/v2/auth?scope=ZohoCRM.modules.leads.ALL,ZohoCRM.settings.fields.ALL&client_id=" . $request->input('client_id') . "&response_type=code&access_type=offline&redirect_uri=" . route('oauth.zoho.crm.callback'));
         return redirect($response->effectiveUri());
     }
@@ -23,14 +30,15 @@ class ZohoCrmController extends Controller
         if (isset(request()->code)) {
             $formData = [
                 "grant_type"    => "authorization_code",
-                "client_id"     => session('zoho_client_id'),
-                "client_secret" => session('zoho_client_secret'),
+                "client_id"     => Auth::user()->zoho_client_id,
+                "client_secret" => Auth::user()->zoho_client_secret,
                 "redirect_uri"  => route('oauth.zoho.crm.callback'),
                 "code"          => request()->code,
             ];
             $response = Http::asForm()->post("https://accounts.zoho.com/oauth/v2/token", $formData);
             $token = json_decode($response->body());
             Session::put('zoho_auth', $token);
+            Auth::user()->update(['zoho_oauth_token' => $token]);
         }
         return redirect()->route('task.1');
     }

@@ -23,7 +23,7 @@ class UserController extends Controller
             ->post('https://www.googleapis.com/drive/v3/files/' . $request->validated()['google_sheet_id'] . '/watch', [
                 'id'      => Str::uuid(),
                 'type'    => "web_hook",
-                'address' => 'https://a480-103-70-170-0.ngrok.io/api/google-get-notified/' . Auth::id(),
+                'address' => 'https://d5d7-45-249-102-121.ngrok.io/api/google-get-notified/' . Auth::id(),
                 //'address' => route('google.get.notified'),
             ]);
         Session::put('google_push_response', $response->body());

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\CreateSheetRowRequest;
 use App\Models\User;
 use App\Services\GoogleOauthService;
+use Illuminate\Support\Facades\Log;
 
 class SyncController extends Controller
 {
@@ -16,6 +17,7 @@ class SyncController extends Controller
 
     public function googleGetNotifies(User $user)
     {
+        Log::info('Google get notified');
         $googleService = new GoogleOauthService($user->google_client_id, $user->google_client_secret);
         $sheetData = $googleService->getSheetData($user->google_oauth_token, $user->google_sheet_id, 'A:E');
 

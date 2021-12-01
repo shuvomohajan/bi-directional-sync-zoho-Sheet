@@ -20,3 +20,4 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 Route::post('zoho-crm-get-notified/{user}', [SyncController::class, 'zohoCrmGetNotified']);
+Route::any('google-get-notified/{user}', [SyncController::class, 'googleGetNotifies'])->name('google.get.notified');

@@ -21,7 +21,7 @@ class ZohoCrmController extends Controller
             'zoho_client_id'     => $request->input('client_id'),
             'zoho_client_secret' => $request->input('client_secret'),
         ]);
-        $response = Http::post("https://accounts.zoho.com/oauth/v2/auth?scope=ZohoCRM.modules.leads.ALL,ZohoCRM.settings.fields.ALL&client_id=" . $request->input('client_id') . "&response_type=code&access_type=offline&redirect_uri=" . route('oauth.zoho.crm.callback'));
+        $response = Http::post("https://accounts.zoho.com/oauth/v2/auth?scope=ZohoCRM.modules.leads.ALL,ZohoCRM.settings.fields.ALL,ZohoSearch.securesearch.READ&client_id=" . $request->input('client_id') . "&response_type=code&access_type=offline&redirect_uri=" . route('oauth.zoho.crm.callback'));
         return redirect($response->effectiveUri());
     }
 
@@ -45,16 +45,24 @@ class ZohoCrmController extends Controller
 
     public function zohoCrmStore(CreateLeadsRequest $request): RedirectResponse
     {
-        if (!session()->has('zoho_auth'))
-            return redirect()->route('oauth.zoho.crm')->with('error', 'Not Authorized!');
+        if (!session()->has('zoho_auth')) return redirect()->route('oauth.zoho.crm')->with('error', 'Not Authorized!');
+        //check unique email after append in zoho crm
+        if ($this->uniqueCheck($request->validated()['Email']) != 0) return back()->with('error', 'Email already exist.');
 
         $formData = ['data' => [$request->validated()]];
         $response = Http::withHeaders(["Authorization" => "Zoho-oauthtoken " . session()->get('zoho_auth')->access_token])
             ->post("https://www.zohoapis.com/crm/v2/Leads", $formData);
 
-        if ($response->successful())
-            return back()->with('success', 'Leads Created.');
+        if ($response->successful()) return back()->with('success', 'Leads Created.');
         return back()->with('error', 'Somethings Wrong!');
+    }
+
+    public function uniqueCheck($email): int
+    {
+        $searchResponse = Http::withHeaders(["Authorization" => "Zoho-oauthtoken " . session()->get('zoho_auth')->access_token])
+            ->get('https://www.zohoapis.com/crm/v2/Leads/search?email=' . $email);
+        $responseData = json_decode($searchResponse->body());
+        return count($responseData->data ?? []);
     }
 
     public function getFieldName()

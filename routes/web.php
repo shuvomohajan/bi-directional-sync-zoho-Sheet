@@ -20,6 +20,7 @@ Route::view('/', 'welcome');
 
 Route::middleware('auth')->group(function () {
     Route::view('/dashboard', 'dashboard')->name('dashboard');
+
     Route::prefix('task-1')->group(function () {
         Route::view('/', 'task1.index')->name('task.1');
         //Google Sheets
@@ -31,6 +32,7 @@ Route::middleware('auth')->group(function () {
         Route::post('oauth-zoho-crm', [ZohoCrmController::class, 'oauthZohoCrmAuthorize'])->name('oauth.zoho.crm.authorize');
         Route::get('oauth-zoho-crm/callback', [ZohoCrmController::class, 'oauthZohoCrmCallback'])->name('oauth.zoho.crm.callback');
     });
+    
     Route::prefix('task-2')->group(function () {
         Route::put('user-google-sheets-id-update', [UserController::class, 'updateUserGoogleSheetId'])->name('user.google.sheets.id.update');
         //Google Sheets

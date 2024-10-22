@@ -13,17 +13,19 @@ class UserController extends Controller
 {
     public function updateUserGoogleSheetId(UpdateGoogleSheetIdRequest $request): RedirectResponse
     {
-        if (!Session::has('g_auth')) return redirect()->route('oauth.google.sheets')->with('error', 'Not Authorized!');
+        if (!Session::has('g_auth')) {
+            return redirect()->route('oauth.google.sheets')->with('error', 'Not Authorized!');
+        }
 
         Auth::user()->update($request->validated());
 
         //making watch request to google push notification
         $response = Http::accept('application/json')
-            ->withHeaders(["Authorization" => "Bearer " . session()->get('g_auth')['access_token']])
+            ->withHeaders(['Authorization' => 'Bearer ' . session()->get('g_auth')['access_token']])
             ->post('https://www.googleapis.com/drive/v3/files/' . $request->validated()['google_sheet_id'] . '/watch', [
                 'id'      => Str::uuid(),
-                'type'    => "web_hook",
-                'address' => 'https://d5d7-45-249-102-121.ngrok.io/api/google-get-notified/' . Auth::id(),
+                'type'    => 'web_hook',
+                'address' => env('NGROK_URL') . '/api/google-get-notified/' . Auth::id(),
                 //'address' => route('google.get.notified'),
             ]);
         Session::put('google_push_response', $response->body());
